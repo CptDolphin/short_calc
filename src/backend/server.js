@@ -6,7 +6,7 @@ const path = require('path');
 const port = 7000;
 const hostname = 'localhost';
 
-const paths = [
+const routes = [
     [/html$/i, path.join(__dirname, '../frontend/index.html'), 'text/html' ],
 	[/style\.css$/i, path.join(__dirname, '../frontend/style.css'), 'text/css' ],
 	[/app\.js$/i, path.join(__dirname, '../frontend/app.js'), 'text/javascript' ]
@@ -18,26 +18,25 @@ http.createServer((request, response) => {
         request.url = '/index.html';
     }
 
-    paths.find(([re, filepath, type]) => { 
-        let item = request.url.match(re);
-        console.log('item is:', item);
+    const route = routes.find(element => element.re.test(request.url));
+    console.log('item is:', route);
 
-        if (!item) {
-            // didn't find the file it searched for
+    if (!route) {
+        return void response.end('Sorry, could not find a route.\n');
+    }
+
+    const [, path, content_type] = route;
+    
+    fs.readFile(path, (err, content) => {
+        if (err) {
+            console.error(err);
+            response.end('error reading file');
             return;
         }
-
-        fs.readFile(filepath, (err, content) => {
-            if (err) {
-                console.error(err);
-                response.end('');
-                return;
-            }
-        
-            response.writeHead(200, { 'Content-Type': type});
-            response.write(content);
-            response.end();
-        });
+    
+        response.writeHead(200, { 'Content-Type': content_type});
+        response.write(content);
+        response.end();
     });
 }).listen(port, hostname, () => {
     console.log(`Server running at ${hostname}:${port}`);
