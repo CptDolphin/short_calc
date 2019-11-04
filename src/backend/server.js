@@ -3,7 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const port = 6000;
+const port = 7000;
 const hostname = 'localhost';
 
 const paths = [
@@ -12,11 +12,18 @@ const paths = [
 	[/app\.js$/i, path.join(__dirname, '../frontend/app.js'), 'text/javascript' ]
 ];
 
-http.createServer(function (request, response) {
-    paths.find(([re, filepath, type]) => {
-        let match = re.test(request.url); 
+http.createServer((request, response) => {
+    console.log('request.url', request.url);
+    if(request.url == '/'){
+        request.url = '/index.html';
+    }
 
-        if (!match) {
+    paths.find(([re, filepath, type]) => { 
+        let item = request.url.match(re);
+        console.log('item is:', item);
+
+        if (!item) {
+            // didn't find the file it searched for
             return;
         }
 
