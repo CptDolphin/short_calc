@@ -18,11 +18,12 @@ http.createServer((request, response) => {
         request.url = '/index.html';
     }
 
-    const route = routes.find(element => element.re.test(request.url));
+    const route = routes.find(element => element[0].test(request.url));
     console.log('item is:', route);
 
     if (!route) {
-        return void response.end('Sorry, could not find a route.\n');
+        //        return void response.end('Sorry, could not find a route.\n');
+        return;
     }
 
     const [, path, content_type] = route;
