@@ -3,3 +3,8 @@ src/.DS_Store
 node_modules
 *.swp
 *.swo
+package-lock.json
+src/bad_front/
+src/finished_front/
+src/frontend/bundle.js
+src/frontend/bundle.js.map

@@ -7,7 +7,7 @@ const hostname = 'localhost';
 
 const routes = [
     [/html$/i, path.join(__dirname, '../frontend/index.html'), 'text/html' ],
-	[/style\.css$/i, path.join(__dirname, '../frontend/style.css'), 'text/css' ],
+    [/style\.css$/i, path.join(__dirname, '../frontend/style.css'), 'text/css' ],
     [/js$/i, undefined, 'text/javascript'],
     [/js\.map$/i, undefined, 'text/plain'],
 ];
@@ -23,8 +23,8 @@ http.createServer((request, response) => {
         console.log('item is:', route);
 
         if (route[1] === undefined) {
-            let x = path.join(__dirname, '../frontend', request.url);
-            fs.readFile(x, (err, content) => {
+            let not_found_file = path.join(__dirname, '../frontend', request.url);
+            fs.readFile(not_found_file, (err, content) => {
                 if (err) {
                     console.error(err);
                     response.end('');
